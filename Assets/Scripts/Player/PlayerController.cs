@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public Rigidbody2D rb;
 
+    public Health health;
+
     private void Awake()
     {
         instance = this;

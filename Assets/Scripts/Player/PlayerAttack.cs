@@ -2,25 +2,27 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] Transform attackPoint;
-    [SerializeField] float attackRange;
-    [SerializeField] LayerMask enemyLayers;
+    [SerializeField] protected Transform attackPoint;
+    [SerializeField] protected float attackRange;
+    [SerializeField] protected LayerMask enemyLayers;
 
-    [SerializeField] bool isAtking = false;
+    [SerializeField] public bool isAtking = false;
     [SerializeField] protected float atkRate = 2;
     [SerializeField] protected float countAtkTime = 0;
 
-    [SerializeField] private int damage;
+
+    [SerializeField] protected int damage;
     private void Update()
-    {
+    {   
         Attacking();
     }
-    private void Attacking()
+    protected virtual void Attacking()
     {
+
         if (isAtking)
         {
             countAtkTime += Time.deltaTime;
-            if(countAtkTime > atkRate)
+            if (countAtkTime > atkRate)
             {
                 isAtking = false;
                 countAtkTime = 0;
@@ -28,16 +30,20 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
         if (!InputManager.Instance.NormalAtk) return;
-        
         PlayerController.Instance.animator.SetTrigger("Attack");
+        PlayerController.Instance.animator.SetFloat("AttackState", 0f);
+        PlayerController.Instance.animator.SetFloat("SkillState",0f);
+        
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
         if(hitEnemies.Length > 0) isAtking = true;
         foreach (Collider2D enemy in hitEnemies)
         {
-            enemy.gameObject.GetComponent<Enemy>().hp -= damage;
+            enemy.gameObject.GetComponent<Health>().TakeDamage(damage);
         }
+
     }
-    private void OnDrawGizmosSelected()
+    protected void OnDrawGizmosSelected()
     {
         if (attackPoint == null) return;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
