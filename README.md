@@ -1,4 +1,4 @@
-My first project unity game demo
+My first Unity game demo
 
 ![image](https://github.com/danhquyen2004/QD_01/assets/129659654/125b5166-8653-4a18-9484-69b6a908d43e)
 
